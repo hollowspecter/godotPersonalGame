@@ -1,9 +1,26 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/turtle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/UI/TextBox.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Util/TextCollider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Props/BackgroundPaper.tscn" type="PackedScene" id=4]
 
 [node name="root" type="Node2D"]
 
 [node name="Turtle" parent="." instance=ExtResource( 1 )]
 position = Vector2( 314.399, 298.887 )
 speed = 100.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TextBox" parent="UI" instance=ExtResource( 2 )]
+
+[node name="Level" type="Node" parent="."]
+
+[node name="TextBoxes" type="Node" parent="Level"]
+
+[node name="Start" parent="Level/TextBoxes" instance=ExtResource( 3 )]
+position = Vector2( 528.083, 309.45 )
+text = "Sometimes I feel like a turtle..."
+
+[node name="BackgroundPaper" parent="Level" instance=ExtResource( 4 )]

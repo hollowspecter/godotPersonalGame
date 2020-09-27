@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://Assets/Art/Animations/turtle.tres" type="SpriteFrames" id=1]
-[ext_resource path="res://Assets/Art/environment_512x256.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Art/Sprites/turtle_set_1_512x512.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Art/Sprites/environment_512x256.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/Controller.cs" type="Script" id=3]
-[ext_resource path="res://Scenes/UI/TextBox.tscn" type="PackedScene" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -31,25 +30,139 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=5]
 radius = 108.0
 
+[sub_resource type="Animation" id=6]
+resource_name = "Hide"
+length = 0.9
+step = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 6, 7, 8 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "Shell"
+length = 1.2
+loop = true
+step = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10, 11 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Unhide"
+length = 0.9
+step = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 7, 6 ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 1.8
+loop = true
+step = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9, 1.2, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "Hide"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "Shell"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "Unhide"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+advance_condition = "hiding"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+advance_condition = "unhiding"
+
+[sub_resource type="AnimationNodeStateMachine" id=18]
+states/Hide/node = SubResource( 10 )
+states/Hide/position = Vector2( -573.188, -452 )
+states/Shell/node = SubResource( 11 )
+states/Shell/position = Vector2( -573.188, -354 )
+states/Unhide/node = SubResource( 12 )
+states/Unhide/position = Vector2( -779.188, -354 )
+states/Walk/node = SubResource( 13 )
+states/Walk/position = Vector2( -788.188, -452 )
+transitions = [ "Walk", "Hide", SubResource( 14 ), "Hide", "Shell", SubResource( 15 ), "Unhide", "Walk", SubResource( 16 ), "Shell", "Unhide", SubResource( 17 ) ]
+start_node = "Walk"
+graph_offset = Vector2( -1215.42, -547 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=19]
+
 [node name="Turtle" type="Area2D"]
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="MainSprite" type="AnimatedSprite" parent="."]
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0.8 )
 scale = Vector2( 0.5, 0.5 )
-frames = ExtResource( 1 )
-animation = "Walk"
-frame = 1
-playing = true
-offset = Vector2( -18.833, -12.65 )
+texture = ExtResource( 1 )
+vframes = 4
+hframes = 4
+frame = 3
 
-[node name="Shadow" type="AnimatedSprite" parent="MainSprite"]
+[node name="Shadow" type="AnimatedSprite" parent="Sprite"]
+modulate = Color( 1, 1, 1, 0.321569 )
 show_behind_parent = true
 position = Vector2( 15, 85 )
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 scale = Vector2( 0.5, 0.5 )
 shape = SubResource( 5 )
 
@@ -58,8 +171,17 @@ position = Vector2( 200, 0 )
 current = true
 smoothing_enabled = true
 
-[node name="TextBox" parent="Camera2D" instance=ExtResource( 4 )]
-margin_left = -512.0
-margin_top = -300.0
-margin_right = -512.0
-margin_bottom = -300.0
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_speed = 0.3
+anims/Hide = SubResource( 6 )
+anims/Shell = SubResource( 7 )
+anims/Unhide = SubResource( 8 )
+anims/Walk = SubResource( 9 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 18 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 19 )
+parameters/conditions/hiding = false
+parameters/conditions/unhiding = false
