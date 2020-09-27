@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Assets/Art/Animations/turtle.tres" type="SpriteFrames" id=1]
+[ext_resource path="res://Assets/Art/environment_512x256.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/Controller.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/UI/TextBox.tscn" type="PackedScene" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 512, 256 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 512, 0, 512, 256 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1024, 0, 512, 256 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 3.0
+} ]
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 108.0
+
+[node name="Turtle" type="Area2D"]
+script = ExtResource( 3 )
+
+[node name="MainSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+frames = ExtResource( 1 )
+animation = "Walk"
+frame = 1
+playing = true
+offset = Vector2( -18.833, -12.65 )
+
+[node name="Shadow" type="AnimatedSprite" parent="MainSprite"]
+show_behind_parent = true
+position = Vector2( 15, 85 )
+frames = SubResource( 4 )
+frame = 1
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2( 0.5, 0.5 )
+shape = SubResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 200, 0 )
+current = true
+smoothing_enabled = true
+
+[node name="TextBox" parent="Camera2D" instance=ExtResource( 4 )]
+margin_left = -512.0
+margin_top = -300.0
+margin_right = -512.0
+margin_bottom = -300.0
